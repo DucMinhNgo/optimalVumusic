@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Stripe</title>
+        <link rel="stylesheet" href="styles.css" />
+        <script src="https://checkout.stripe.com/checkout.js" defer></script>
+        <!-- <script src="https://js.stripe.com/v2/" defer></script> -->
+        <script>
+            var price = '<%=price%>'
+        </script>
+        <script src="store.js" defer></script>
+    </head>
+    <body onload="purchaseClicked()" background="https://wptravel.io/wp-content/uploads/edd/2019/03/stripe-banner.jpg">
+
+        <section class="container content-section">
+
+            <button class="btn-purchase" type="button">PURCHASE</button>
+            <!-- <iframe src="https://pay.stripe.com/receipts/acct_1GIW8rEI67awS10r/ch_1GJA8kEI67awS10rmAPBJjed/rcpt_GqrsxXu1kMpMZWjrPeVgDIMhnPj0sNf"></iframe> -->
+        </section>
+    </body>
+</html>

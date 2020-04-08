@@ -1,0 +1,15 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<h1>Dustin</h1>
+<script>
+     $.ajax({
+        type: "GET",
+        url: "http://viws.ddns.net:8092/getcookie",
+        success: function (data) {
+          console.log("SUCCESS: ", data);
+          $("resultDataset").text(data)
+        },
+        error: function(e) {
+          console.log("ERROR: ")
+        }
+      })
+</script>

@@ -1,0 +1,176 @@
+<script src="https://js.stripe.com/v3/"></script>
+<link rel="stylesheet" href="css/stripeui.css" />
+<script src="stripeui.js" defer></script>
+
+
+<!-- <div class="field">
+  <label for="email">Email</label>
+  <input id="email" class="input" type="text" placeholder="janedoe@gmail.com" required="" autocomplete="email">
+</div> -->
+
+<!-- <form action="/charge" method="post" id="payment-form">
+  <div class="form-row">
+    <label for="card-element">
+      Credit or debit card
+    </label>
+
+    <div id="card-element">
+       A Stripe Element will be inserted here. -->
+    <!-- </div> -->
+
+    <!-- Used to display form errors. -->
+    <!-- <div id="card-errors" role="alert"></div>
+  </div> -->
+
+  <!-- <button>Submit Payment</button> -->
+
+</form>
+<!-- <button class="btn-purchase" type="button">PURCHASE</button> -->
+<!-- FRONTEND -->
+<div class="wrapper">
+  <div class="payment-form">
+      <div class="form-title ">
+          <div class="title-text">Payment</div>
+      </div>
+      <div class="form-detail" >
+          <div class="form-detail-items" style="margin-top:20px">
+              <div class="items-title">Name</div>
+              <input class="items-input items-title-placeholder">
+          </div>
+          <div class="form-detail-items " style="display: flex;">
+              <div class="form-detail-items form-detail-items-2">
+                  <div class="items-title">Email</div>
+                  <input class="items-input items-title-placeholder">
+              </div>
+              <div style="height: 100%;width: 10%;"></div>
+              <div class="form-detail-items form-detail-items-2">
+                  <div class="items-title">Phone</div>
+                  <input class="items-input items-title-placeholder">
+              </div>
+          </div>
+          <div class="form-detail-items">
+              <div class="items-title">Adress</div>
+              <input class="items-input items-title-placeholder">
+          </div>
+          <div class="form-detail-items " style="display: flex;">
+            <div class="form-detail-items form-detail-items-2">
+                <div class="items-title">City</div>
+                <input class="items-input items-title-placeholder">
+            </div>
+            <div style="height: 100%;width: 10%;"></div>
+            <div class="form-detail-items form-detail-items-2">
+                <div class="items-title">State</div>
+                <input class="items-input items-title-placeholder">
+            </div>
+        </div>
+          <div class="form-detail-items">
+              <div class="items-title">Card Number</div>
+              <!-- <input class="items-input"> -->
+              <form action="/charge" method="post" id="payment-form">
+                <div class="form-row">            
+                  <div id="card-element" class="items-input">
+                    <!-- A Stripe Element will be inserted here. -->
+                  </div>
+              
+                  <!-- Used to display form errors. -->
+                  <div id="card-errors" role="alert"></div>
+                </div>
+              
+                <!-- <button>Submit Payment</button> -->
+              
+              </form>
+          </div>
+          <div class="form-detail-items">
+              <button class="btn-purchase item-btn" type="button">Confirm my payment</button>
+          </div>
+          <div class="form-detail-items">
+            <!-- <button class="item-btn" type="button">CANCEL</button> -->
+        </div>
+          <!-- <div class="form-detail-items">
+              <button class="item-btn">Confirm my payment</button>
+          </div> -->
+      </div>
+  </div>
+</div>
+<!-- END FRONTEND -->
+
+
+
+<style>
+  /* input.items-input {
+    /* width: 88px; */
+    /* height: 37px; */
+  /* }  */
+  .wrapper{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  background-color: #ebebeb4d;
+  align-items: center;
+  justify-content: center;
+  font: normal normal normal 14px/2em "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
+}
+
+.payment-form{
+  height: 550px;
+  width: 800px;
+}
+.title-text{
+  color: #4f4dd0;
+  font-size: 25px;
+  padding-left: 10px;
+}
+.form-title{
+  height: 30px;
+  padding :10px
+}
+.form-detail{
+  background-color: white;
+  border-radius: 20px;
+  height: 520px;
+  padding: 5px 20px;
+}
+.form-detail-items{
+  margin: 10px 0px;
+ 
+}
+.form-detail-items-2{
+  width: 45%;
+  display: block;
+}
+.form-detail-items-3{
+  width: 31%;
+}
+.items-title{
+  color: #4f4dd0;
+  font-size: 16px;
+  /* font-family: none; */
+}
+.items-title-placeholder{
+  color: rgb(12, 12, 12);
+  font-size: 20px;
+  font-family: none;
+  /* color: #32325d; */
+  /* font-family: "Helvetica Neue", Helvetica, sans-serif; */
+  /* font-size: 16px; */
+  /* -webkit-font-smoothing: antialiased; */
+}
+
+.items-input{
+  border: solid 1px   ;
+  width: 100%;
+  border-radius: 5px;
+  font-family: none;
+  color: #4f4dd0;
+  height: 37px;
+  padding-left: 10px;
+}
+
+.item-btn{
+  color: white;
+  background-color: #4f4dd0;
+  float: right;
+  border-radius: 10px;
+  height: 37px;
+}
+</style>
