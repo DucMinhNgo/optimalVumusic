@@ -139,8 +139,8 @@ _before_html += '<p style="margin:0px;font-size:14px;font-family:Helvetica,Arial
 _before_html += '</p><table width="560" border="0" cellpadding="0" cellspacing="0">';
 _before_html += '<tbody><tr>';
 _before_html += '<td align="center" style="color:#32454c;font-family:Helvetica,Arial,Verdana sans-serif">';
-_before_html += '<p style="font-size:42px;line-height:1.25;margin:0"><b>Your website needs you.</b></p>';
-_before_html += '<p style="font-size:14px;line-height:1.71;margin:20px 0 40px 0">We just want to make sure you’re still going to conquer the world with your website</p>';
+_before_html += '<p style="font-size:42px;line-height:1.25;margin:0"><b>Vimusic website needs you.</b></p>';
+_before_html += '<p style="font-size:14px;line-height:1.71;margin:20px 0 40px 0">We just want to make sure you’re still want to create your account</p>';
 _before_html += '</td>';
 _before_html += '</tr>';
 
@@ -148,6 +148,8 @@ _before_html += '<tr>';
 _before_html += '<td align="center" style="color:#ff5c62;font-size:14px;line-height:20px">';
 
 
+
+// var _content_html = '<a href="#"><strong>Verify Code:  codeverify </strong></a>';
 
 var _after_html = '</td>';
 _after_html += '</tr>';
@@ -164,33 +166,38 @@ _after_html += '</tbody></table>';
 _after_html += '<table border="0" cellpadding="0" cellspacing="0" width="540">';
 _after_html += '<tbody><tr>';
 _after_html += '<td align="center" style="color:#32454c;font-family:Helvetica,Arial,Verdana sans-serif;padding-top:40px">';
-_after_html += '<p style="font-size:24px;line-height:1.33;margin:0"><b>If you want to give your website a rest - no worries.</b></p>';
-_after_html += '<p style="font-size:14px;line-height:1.71;margin:20px 0 40px 0">We will put your website to sleep after two weeks and it will be safe and sound with us waiting for you to come back. You can always upgrade to premium for more features and power and to avoid your website going to sleep.</p>';
+_after_html += '<p style="font-size:24px;line-height:1.33;margin:0"><b>Please share vimusic website to all your friend.</b></p>';
+_after_html += '<p style="font-size:14px;line-height:1.71;margin:20px 0 40px 0">We will create new music use AI technology and listen your music</p>';
 _after_html += '</td>';
 _after_html += '</tr>';
 
 _after_html += '<tr>';
 _after_html += '<td align="center" style="color:#ff5c62;font-size:14px;line-height:20px">';
 
-_after_html += '<a href="#"><strong>Upgrade To Premium</strong></a>';
+// _after_html += '<a href="#"><strong>Upgrade To Premium</strong></a>';
+_after_html += '<a href="#" rel="noopener noreferrer" style="font-family:Verdana,Sans-Serif;background-color:#ff5c62;border-radius:3px;color:#ffffff;display:inline-block;font-size:14px;line-height:50px;text-align:center;text-decoration:none;width:220px" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://mailer.000webhost.com/186422140/32b1e58f5139bce92d31ad507e90adf5/3689?e%3DeNrLKCkpKLbS1y8vL9czMDAoT03KyC8u0UvOz9VPLkjMS83RzclPz8wDABfbDkA%253D%26s%3Da5bf546c9bd44bab9a965fd5c637d404c063d2651044086027787bf890227b28&amp;source=gmail&amp;ust=1586404941632000&amp;usg=AFQjCNF6DfDc-ugT-3W4FBBOVLFT3zXqQw"><strong>Upgrade To Premium</strong></a>';
 
 _after_html += '</td>';
 _after_html += '</tr>';
 _after_html += '</tbody></table><p></p>';
 _after_html += '</div>';
+
 router.post('/verifyemail', function (req, res) {
   const {email} = req.body;
   var codeverify = Math.floor(Math.random()*100000).toString();
   console.log(codeverify);
   success = myCache.set(email, codeverify, 10000 );
-  var _content_html = '<a href="#"><strong>Verify Code:  codeverify </strong></a>';
-  var _html = _before_html + _content_html + _after_html;
+  // var _content_html = '<a href="#"><strong>Verify Code:  ' + codeverify  + '</strong></a>';
+  var _content_html = '<a href="#" rel="noopener noreferrer" style="font-family:Verdana,Sans-Serif;background-color:#ff5c62;border-radius:3px;color:#ffffff;display:inline-block;font-size:14px;line-height:50px;text-align:center;text-decoration:none;width:220px" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://mailer.000webhost.com/186422140/32b1e58f5139bce92d31ad507e90adf5/3689?e%3DeNrLKCkpKLbS1y8vL9czMDAoT03KyC8u0UvOz9VPLkjMS83RzclPz8wDABfbDkA%253D%26s%3Da5bf546c9bd44bab9a965fd5c637d404c063d2651044086027787bf890227b28&amp;source=gmail&amp;ust=1586404941632000&amp;usg=AFQjCNF6DfDc-ugT-3W4FBBOVLFT3zXqQw"><strong>Verify Code: ' + codeverify + '</strong></a>';
+  // var _html = _before_html + _content_html + _after_html;
+  _before_html += _content_html;
+  _before_html += _after_html;
   var mailOptions = {
       from: 'vimusicapp@gmail.com',
       to: email,
       subject: 'Sending verify code from vimusic',
       text: codeverify,
-      html: _html
+      html: _before_html
     };
     
     transporter.sendMail(mailOptions, function(error, info){
@@ -259,8 +266,6 @@ router.post('/login', function(req, res) {
     });
   }
 });
-
-
 });
 
 router.get('/logout', function(req, res) {
