@@ -21,6 +21,18 @@ var main = {
 	]
 	};
 var userSchema = mongoose.Schema({
+	firstName: {
+		type: String,
+		default: ''
+	},
+	lastName: {
+		type: String,
+		default: ''
+	},
+	userName: {
+		type: String,
+		default: ''
+	},
 	email: {
 		type: String,
 		require: true
@@ -94,6 +106,10 @@ var userSchema = mongoose.Schema({
 		default: []
 	  },
 	  listPayment: {
+		  type: Array,
+		  default: []
+	  },
+	  listAlbum: {
 		  type: Array,
 		  default: []
 	  },

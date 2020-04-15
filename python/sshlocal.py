@@ -285,5 +285,6 @@ def responseImage(filename, _userid = 1):
 @app.route("/api/commandai", methods=["GET"])
 def command_ai():
 	return "interface('generate', 'sad', 'pop', 1, 1)"
+
 if __name__ == '__main__':
 	app.run(host='0.0.0.0', port=8091, debug=True)

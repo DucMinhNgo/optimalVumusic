@@ -4,13 +4,19 @@ var fs = require('fs');
 const { exec } = require("child_process");
 const system = require('system-commands')
 var spawn = require("child_process").spawn;
-const CircularJSON = require('circular-json');
+// const CircularJSON = require('circular-json');
 var APP_ROOT = "/home/dustin/nodejs/vimusic";
 var arrRequest;
 var arrResponse;
 var lisResponse;
-var cache = require('memory-cache');
+var listGPU;
+// var cache = require('memory-cache');
+var Request = require("request");
 // cache.put('foo', []);
+function dropElementFromArray (value, arr) {
+    let array_gpu = arr.filter(item => item !== value);
+    return array_gpu;
+}
 function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
   }
@@ -25,7 +31,7 @@ function callName (req, res) {
     // E.g : http://localhost:3000/name?firstname=Mike&lastname=Will 
     // so, first name = Mike and last name = Will 
     var process = spawn('python',["./python/test.py"]);
-    process.stdout.on('data', function(data) { 
+    process.stdout.on('data', function(data) {
         res.send(data.toString()); 
         })
     }
@@ -57,41 +63,6 @@ function getListFileInFolder (_midiPath) {
 }
 
 module.exports = app => {
-    app.get('/createjson', (req, res) => {
-        /*
-        * Create .json file
-        */
-       var main = {
-        "verse": [
-            "I've been alone with you inside my mind",
-            "And in my dreams I've kissed your lips a thousand times",
-            "I sometimes see you pass outside my door",
-            "Hello, is it me you're looking for?"
-        ],
-        "chorus":
-        [
-            "Hello from the other side",
-            "I must've called a thousand times",
-            "To tell you I'm sorry for everything that I've done",
-            "But when I call you never seem to be home",
-            "Hello from the outside",
-            "At least I can say that I've tried",
-            "To tell you I'm sorry for breaking your heart",
-            "But it don't matter, it clearly doesn't tear you apart anymore"
-        ]
-    }
-        // writeFile function with filename, content and callback function
-        fs.writeFile(APP_ROOT + "/public/musics/5e68828e1a301f125fb94c50" + "/temp_midi/test_lyrics.json", JSON.stringify(main) , function (err) {
-            if (err) throw err;
-            console.log('File is created successfully.');
-        });
-        /*
-        * end create .json file
-        */
-       res.json({
-           status: true
-       })
-    });
     app.get('/pushlist', (req, res) => {
         if (lisResponse == undefined) {
             lisResponse = [];
@@ -168,129 +139,6 @@ module.exports = app => {
             }
         });
     })
-    app.get('/getduration', (req, res) =>{
-        var mp3Duration = require('mp3-duration');
-        mp3Duration('home/dustin/nodejs/vimusicpublic/musics/5e68828e1a301f125fb94c50/temp_midi/MT_gfm_generate_midi_03:26:31.831210_1_noteTemp:1.0_durTemp:1.0.midi', function (err, duration) {
-        if (err) return console.log(err.message);
-    res.json({result: 'Your file is ' + duration + ' seconds long'});
-});
-
-    });
-    app.get('/indexajax', (req, res) => res.render('testajax'));
-    app.get('/api/command', function(req, res) {
-     var _string = "MT_gfm_generate_midi_10:18:14.818605_1_noteTemp:1.0_durTemp:1.0.midi\nMT_gfm_generate_midi_10:19:24.521069_1_noteTemp:1.0_durTemp:1.0.midi\n";
-     const arr_music = _string.split('\n');
-     const len_array_music = arr_music.length;
-     let command_convert = "";
-     for (let i = 0; i < len_array_music - 1; i++) {
-         let element = arr_music[i];
-         let len_element = element.length;
-        //  console.log(len_element);
-        //  console.log(element);
-        //  console.log(element.substring(0,len_element - 5));
-         let new_name = element.substring(0,len_element - 5) + ".mp3";
-         let subCommand = "timidity " + APP_ROOT + "/public/musics/5e68828e1a301f125fb94c50/temp_midi/" + element + " -Ow -o - | lame - -b 64 " + APP_ROOT + "/public/musics/" + new_name;
-         if (i == 0) {
-             command_convert += subCommand;
-         } else {
-             command_convert += " && " + subCommand;
-         }
-    }
-
-    exec(command_convert, (error, stdout, stderr) => {
-        if (error) {
-           //  res.json({error: error});
-        } if (stderr) {
-           
-            res.send({result: command_convert});
-            
-           //  res.json({stderr: stderr});
-        } else {
-           //  res.json({stdout: stdout});
-        }
-       });
-    });
-    app.put('/api/reboot/:id', function(req, res) {
-        // listMusic
-        const id = req.params.id;
-        arr = [{
-                idMusic: (new Date()).getTime().toString(36) + Math.random().toString(36).slice(2),
-                key: 1,
-                title: "0AuraLee2",
-                duration: 97,
-                parameter: "Fantasy, F minor, Dragonborn Ensemble, 80 BPM, 4/4",
-                createDate:new Date(),
-                likeStatus:'false',
-                link: "0AuraLee2.mp3"
-            },
-            {
-                idMusic: (new Date()).getTime().toString(36) + Math.random().toString(36).slice(2),
-                key: 2,
-                title: "1",
-                duration: 444,
-                parameter: "Fantasy, F minor, Dragonborn Ensemble, 80 BPM, 4/4",
-                createDate:new Date(),
-                likeStatus:'false',
-                link: "1.mp3"
-            },
-            {
-                idMusic: (new Date()).getTime().toString(36) + Math.random().toString(36).slice(2),
-                key: 3,
-                title: "2",
-                duration: 232,
-                parameter: "Fantasy, F minor, Dragonborn Ensemble, 80 BPM, 4/4",
-                createDate:new Date(),
-                likeStatus:'false',
-                link: "2.mp3"
-            },
-            {
-                idMusic: (new Date()).getTime().toString(36) + Math.random().toString(36).slice(2),
-                key: 4,
-                title: "4",
-                duration: 789,
-                parameter: "Fantasy, F minor, Dragonborn Ensemble, 80 BPM, 4/4",
-                createDate:new Date(),
-                likeStatus:'false',
-                link: "4.mp3"
-            },
-            {
-                idMusic: (new Date()).getTime().toString(36) + Math.random().toString(36).slice(2),
-                key: 5,
-                title: "6",
-                duration: 162,
-                parameter: "Fantasy, F minor, Dragonborn Ensemble, 80 BPM, 4/4",
-                createDate:new Date(),
-                likeStatus:'false',
-                link: "6.mp3"
-            },
-            {
-                idMusic: (new Date()).getTime().toString(36) + Math.random().toString(36).slice(2),
-                key: 6,
-                title: "MT_gfm_generate_midi_06:16:19.485630_1_noteTemp:1.0_durTemp:1.0.",
-                duration: 34,
-                parameter: "Fantasy, F minor, Dragonborn Ensemble, 80 BPM, 4/4",
-                createDate:new Date(),
-                likeStatus:'false',
-                link: "MT_gfm_generate_midi_06:16:19.485630_1_noteTemp:1.0_durTemp:1.0..mp3"
-        }]
-        arr = [];
-        User.findOne({_id: id}, function (err, doc) {
-            if (doc) {
-                doc.listMusic = [];
-                doc.listMusic = arr;
-                doc.save();
-                res.json({
-                    status: true,
-                    result: doc.listMusic
-                })
-            } else {
-                res.json({
-                    status: false,
-                    result:'id is not found'
-                });
-        }
-        });
-    });
     app.get('/api/namelist', function(req, res) {
         // listMusic
         var id = req.cookies['idUser'];
@@ -303,8 +151,8 @@ module.exports = app => {
         } else {
             console.log("id not found")
         }
-        id = "5e68828e1a301f125fb94c50"
-        // id = "5e7d9bea2fb3ca5c43912084"
+        // id = "5e68828e1a301f125fb94c50";
+        id = "5e7d9bea2fb3ca5c43912084"
         // const id = req.params.id;
         User.findOne({_id: id}, function (err, doc) {
             if (doc) {
@@ -315,7 +163,7 @@ module.exports = app => {
             } else {
                 res.json({
                     status: false,
-                    result:'id is not found'
+                    msg:'id is not found'
                 });
         }
         });
@@ -378,7 +226,7 @@ module.exports = app => {
                 });
             }
         });
-    })
+    });
     app.post('/api/music/rename', function(req, res) {
         // listMusic
         const {idMusic, newname} = req.body;
@@ -392,7 +240,7 @@ module.exports = app => {
 		} else {
             console.log("id not found")
         }
-        // id = "5e68828e1a301f125fb94c50"
+        id = "5e7d9bea2fb3ca5c43912084";
         // id = "5e68828e1a301f125fb94c50";
         // const id = req.params.id;
         User.findOne({_id: id}, function (err, doc) {
@@ -431,116 +279,194 @@ module.exports = app => {
     app.get('/api/random', function(req, res) {
         res.json({random: (new Date()).getTime().toString(36) + Math.random().toString(36).slice(2)})
     });
-    app.post('/api/precreatemusic', function (req, res) {
-        const genre = 'Classical';
-        var cuda_visible_devices = 2;
-        num_output = 5;
-        var process = spawn('python',["./python/gpu.py"]);
-        process.stdout.on('data', function(data) {
-            if (data.toString() != "null\n") {
-            cuda_visible_devices = Number(data.toString().substring(1,2));
-            console.log("CUDA: ", cuda_visible_devices);
-                let pathMusicFolder = './public/musics/' + genre;
-                let link_remove ="rm -r " + pathMusicFolder + '/temp_midi/';
-                exec(link_remove, (error, stdout, stderr) => {
-                    if (error) {
-                        res.json({
-                            status : false,
-                            msg : 'remove file is error'
-                        });
-                    } if (stderr) {
-                        res.json({
-                            status : false,
-                            msg : 'remove file is error'
-                        });
-                    } else {
-                    }
-                });
-                let genre_Transformer = "";
-                console.log("GENRE: ", genre);
-                if (genre == "Rock") {
-                    genre_Transformer = "Rock_Transformer.pth";
-                } else if (genre == "Pop") {
-                    genre_Transformer = "Pop_Transformer.pth";
-                } else{
-                    genre_Transformer = "Classical_Transformer.pth";
-                } 
-                // /home/dustin/nodejs/myapp/public/musics/"+ id.toString() +"/temp_midi
-                let command_model = "cd /home/dustin/tony && CUDA_VISIBLE_DEVICES=" + cuda_visible_devices.toString() + " python -m MT_multitask.generate_mt --model_path /home/Projects/viMusic/tony/stable_models/" + genre_Transformer + " --output_dir " + APP_ROOT + "/public/musics/"+ genre +"/temp_midi --num_outputs " + num_output.toString() + " --n_words 600 --config default";
-                console.log ("COMMAND: ", command_model);
-                    exec(command_model, (error, stdout, stderr) => {
-                        if (error) {
-                            res.json({
-                                status: false,
-                                result: error.message
-                            });   
-                        }
-                        if (stderr) {
-                            sleep(1000);
-                            _midiPath = "ls " + APP_ROOT + "/public/musics/"+ genre +"/temp_midi";
-                            exec(_midiPath, (error, stdout, stderr) => {
-                                if (error) {
-                                    res.json({
-                                        status: false,
-                                        result: error.message
-                                    });
-                                } if (stderr) {
-                                    res.json({
-                                        status: false,
-                                        result: stderr
-                                    })
-
-                                } else {
-                                    // console.log(stdout);
-                                    if (stdout) {
-                                        // console.log("not empty");
-                                        // var _string = "MT_gfm_generate_midi_10:18:14.818605_1_noteTemp:1.0_durTemp:1.0.midi\nMT_gfm_generate_midi_10:19:24.521069_1_noteTemp:1.0_durTemp:1.0.midi\n";
-                                        var _string = stdout;
-                                        const arr_music = _string.split('\n');
-                                        const len_array_music = arr_music.length;
-                                        let command_convert = "";
-                                        let link = "";
-                                        for (let i = 0; i < len_array_music - 1; i++) {
-                                            let element = arr_music[i];
-                                            let len_element = element.length;
-                                            let new_name = element.substring(0,len_element - 5) + ".mp3";
-                                            link = new_name;
-                                            let subCommand = "timidity " + APP_ROOT + "/public/musics/" + genre + "/temp_midi/" + element + " -Ow -o - | lame - -b 64 " + APP_ROOT + "/public/musics/" + genre + "/basic/" + new_name;
-                                            console.log("subCommand: ", subCommand);
-                                            if (i == 0) {
-                                                command_convert += subCommand;
-                                            } else {
-                                                command_convert += " && " + subCommand;
-                                            }
-                                    }
-                                    
-                                    exec(command_convert, (error, stdout, stderr) => {
-                                        if (error) {
-                                        } if (stderr) {
-                                            sleep(1000);
-                                            res.json({
-                                                status: true,
-                                                msg: 'completed'
-                                            })
-                                        }
-                                        });
-                                    } else {
-                                        res.json({
-                                            status: false,
-                                            msg: 'create music is failed'
-                                        })
-                                    }
-                                }
-                            })
-                        }
-                    })
-            } else {
+    app.get('/api/getnumfileinfolder', function (req, res) {
+        // res.json({
+        //     status: true
+        // })
+        // const {genre, maxnum} = req.body;
+        genre = 'Pop';
+        const _path_genre_basic = "ls " + APP_ROOT + "/public/musics/" + genre + '/basic/';
+        console.log(_path_genre_basic);
+        exec(_path_genre_basic, (error, stdout, stderr) => {
+            if (error) {
                 res.json({
                     status: false,
-                    msg: 'GPU is not found'
+                    result: error.message
                 });
+            } if (stderr) {
+                res.json({
+                    status: false,
+                    result: stderr
+                })
+
+            } else {
+                // console.log(stdout);
+                if (stdout) {
+                    // console.log("not empty");
+                    // var _string = "MT_gfm_generate_midi_10:18:14.818605_1_noteTemp:1.0_durTemp:1.0.midi\nMT_gfm_generate_midi_10:19:24.521069_1_noteTemp:1.0_durTemp:1.0.midi\n";
+                    var _string = stdout;
+                    const arr_music = _string.split('\n');
+                    let num_file_in_genre_basic = arr_music.length;
+                    // console.log('')
+                    res.json({
+                        status: true,
+                        num: num_file_in_genre_basic -1
+                    });
+                }
             }
         });
+    });
+    app.post('/api/precreatemusic', function (req, res) {
+        const {genre, maxnum} = req.body;
+        num_output = 1;
+
+        /*
+        * CHECK MAX NUM
+        */
+    //    const _path_genre_basic = "ls " + APP_ROOT + "/public/musics/" + genre + '/basic/';
+    //    exec(_path_genre_basic, (error, stdout, stderr) => {
+    //     if (error) {
+    //         res.json({
+    //             status: false,
+    //             result: error.message
+    //         });
+    //     } if (stderr) {
+    //         res.json({
+    //             status: false,
+    //             result: stderr
+    //         })
+
+    //     } else {
+    //         if (stdout) {
+    //             var _string = stdout;
+    //             const arr_music = _string.split('\n');
+    //             let num_file_in_genre_basic = arr_music.length;
+    //             if (arr_music.length -1 <)
+                
+    //         }
+    //     }
+    // });
+            /*
+            * CHECK GPU
+            */
+           Request.get("https://viws.ddns.net/predictor/admin/api/gpu", (err, resapi, body) => {
+            if (err) {
+                console.log('error');
+            }
+                let cuda_visible_devices = -1;
+                cuda_visible_devices = Number(resapi.body);
+                console.log(cuda_visible_devices);
+                // if gpu is not found
+                if (cuda_visible_devices == -1) {
+                    // add request to queue
+                    // return (waiting)
+                    res.json({
+                        msg: 'GPU is not found'
+                    });
+                //if gpu is enable
+                } else {
+                    // execute command from first of queue
+                    // cuda_visible_devices = Number(data.toString().substring(1,2));
+                    console.log("CUDA: ", cuda_visible_devices);
+                    let pathMusicFolder = './public/musics/' + genre;
+                    let link_remove ="rm -v " + pathMusicFolder + '/temp_midi/*';
+                    exec(link_remove, (error, stdout, stderr) => {
+                        if (error) {
+                            res.json({
+                                status : false,
+                                msg : 'remove file is error'
+                            });
+                        } if (stderr) {
+                            res.json({
+                                status : false,
+                                msg : 'remove file is error'
+                            });
+                        } else {
+                        }
+                    });
+                    let genre_Transformer = "";
+                    console.log("GENRE: ", genre);
+                    if (genre == "Rock") {
+                        genre_Transformer = "Rock_Transformer.pth";
+                    } else if (genre == "Pop") {
+                        genre_Transformer = "Pop_Transformer.pth";
+                    } else{
+                        genre_Transformer = "Classical_Transformer.pth";
+                    } 
+                    // /home/dustin/nodejs/myapp/public/musics/"+ id.toString() +"/temp_midi
+                    let command_model = "cd /home/dustin/tony && CUDA_VISIBLE_DEVICES=" + cuda_visible_devices.toString() + " python -m MT_multitask.generate_mt --model_path /home/Projects/viMusic/tony/stable_models/" + genre_Transformer + " --output_dir " + APP_ROOT + "/public/musics/"+ genre +"/temp_midi --num_outputs " + num_output.toString() + " --n_words 600 --config default";
+                    console.log ("COMMAND: ", command_model);
+                        exec(command_model, (error, stdout, stderr) => {
+                            if (error) {
+                                dropElementFromArray(cuda_visible_devices, listGPU);
+                                res.json({
+                                    status: false,
+                                    result: error.message
+                                });   
+                            }
+                            if (stderr) {
+                                listGPU = dropElementFromArray(cuda_visible_devices, listGPU);
+                                sleep(1000);
+                                _midiPath = "ls " + APP_ROOT + "/public/musics/"+ genre +"/temp_midi";
+                                exec(_midiPath, (error, stdout, stderr) => {
+                                    if (error) {
+                                        res.json({
+                                            status: false,
+                                            result: error.message
+                                        });
+                                    } if (stderr) {
+                                        res.json({
+                                            status: false,
+                                            result: stderr
+                                        })
+
+                                    } else {
+                                        // console.log(stdout);
+                                        if (stdout) {
+                                            // console.log("not empty");
+                                            // var _string = "MT_gfm_generate_midi_10:18:14.818605_1_noteTemp:1.0_durTemp:1.0.midi\nMT_gfm_generate_midi_10:19:24.521069_1_noteTemp:1.0_durTemp:1.0.midi\n";
+                                            var _string = stdout;
+                                            const arr_music = _string.split('\n');
+                                            const len_array_music = arr_music.length;
+                                            let command_convert = "";
+                                            let link = "";
+                                            for (let i = 0; i < len_array_music - 1; i++) {
+                                                let element = arr_music[i];
+                                                let len_element = element.length;
+                                                let new_name = element.substring(0,len_element - 5) + ".mp3";
+                                                link = new_name;
+                                                let subCommand = "timidity " + APP_ROOT + "/public/musics/" + genre + "/temp_midi/" + element + " -Ow -o - | lame - -b 64 " + APP_ROOT + "/public/musics/" + genre + "/basic/" + new_name;
+                                                console.log("subCommand: ", subCommand);
+                                                if (i == 0) {
+                                                    command_convert += subCommand;
+                                                } else {
+                                                    command_convert += " && " + subCommand;
+                                                }
+                                        }
+                                        
+                                        exec(command_convert, (error, stdout, stderr) => {
+                                            if (error) {
+                                            } if (stderr) {
+                                                sleep(1000);
+                                                res.json({
+                                                    status: true,
+                                                    msg: 'completed',
+                                                    genre: genre
+                                                })
+                                            }
+                                            });
+                                        } else {
+                                            res.json({
+                                                status: false,
+                                                msg: 'create music is failed'
+                                            })
+                                        }
+                                    }
+                                })
+                            }
+                        })
+                    }
+            });
     });
     app.get('/api/lyric', function(req, res) {
         if (req.query.idMusic != undefined) {
@@ -556,7 +482,7 @@ module.exports = app => {
                 console.log("id not found")
             }
             console.log("id: ", id);
-            id = "5e68828e1a301f125fb94c50";
+            // id = "5e68828e1a301f125fb94c50";
             User.findOne({_id: id}, function (err, doc) {
                 if (err) {
                     res.json({
@@ -603,6 +529,88 @@ module.exports = app => {
             })
         }
     });
+    app.get('/pushlistgpu', (req, res) => {
+        res.json({
+            list: listGPU
+        })
+    });
+    /*
+    * return enable GPU of server
+    */
+    app.get('/api/gpu', function (req, res) {
+        if (listGPU == undefined) {
+            listGPU = [];
+        }
+        var num = -1;
+        sleep(1000);
+        var process = spawn('python',["./python/gpu.py"]);
+        process.stdout.on('data', function(data) {
+            
+            // if gpu is not using
+            if (data.toString() != 'null\n'){
+                  let cuda_visible_devices = data.toString().substring(1,2);
+                res.send(cuda_visible_devices);
+              
+                // // check gpu is using
+                // let result = true;
+                // result = listGPU.includes(Number(cuda_visible_devices));
+                // if (result == true) {
+                //     res.send(num.toString());
+                // } else {
+                //     // list gpu is using
+                //     listGPU.push(Number(cuda_visible_devices));
+                //     console.log(listGPU);
+                //     res.send(cuda_visible_devices);
+                // }
+                // // result = listGPU.includes(gpu);
+            } else {
+                res.send(num.toString());
+            }
+        })
+    });
+    app.post('/api/terminal/v1', function (req, res){
+        /*
+        * CHECK LYRIC
+        */
+        var lyric = true;
+        // if lyric is disable
+        if (lyric == false) {
+            // choose music from precreate music repository
+        //if lyric is enable
+        } else {
+            /*
+            * CHECK GPU
+            */
+            Request.get("https://viws.ddns.net/predictor/admin/api/gpu", (err, resapi, body) => {
+                if (err) {
+                    console.log('error');
+                }
+                    var cuda_visible_devices = Number(resapi.body);
+                    console.log(cuda_visible_devices);
+                    // if gpu is not found
+                    if (cuda_visible_devices == -1) {
+                        // add request to queue
+                        // return (waiting)
+                        res.json({
+                            msg: 'GPU is not found'
+                        });
+                    //if gpu is enable
+                    } else {
+                        // execute command from first of queue
+                        res.json({
+                            msg: 'show GPU',
+                            gpu: cuda_visible_devices
+                        });
+                    }
+                });
+        }
+        /*
+        * run check GPU each second run (automation)
+        */
+       /*
+       * run add music to command
+       */
+    });
     app.post('/api/terminal', function(req, res) {
         // console.log(req.body.music);
         // console.log(req.body.params.options);
@@ -618,6 +626,7 @@ module.exports = app => {
         num_output = 1;
         parameter = genre;
         likeStatus = "false";
+        let pathMusicFolder = './public/musics/';
         var listMusic = [];
         var id = req.cookies['idUser'];
             if (id) {
@@ -630,7 +639,16 @@ module.exports = app => {
                 console.log("id not found")
             }
             console.log("id: ", id);
-            id = "5e68828e1a301f125fb94c50";
+            id = "5e7d9bea2fb3ca5c43912084";
+
+
+        // Create folder music
+        var dir = pathMusicFolder + id.toString();
+        if (!fs.existsSync(dir)){
+            fs.mkdirSync(dir);
+        }
+        var dir = pathMusicFolder + id.toString() + '/temp_midi';
+
         var {lyricContent} = req.body.params;
         if (lyricContent.length == 0) {
             console.log('not lyric')
@@ -710,15 +728,14 @@ module.exports = app => {
                     ]
                     };
                     // writeFile function with filename, content and callback function
-                    var link_lyric_json = APP_ROOT + "/public/musics/" + id.toString() + "/test_lyrics.json";
-                    fs.writeFile(link_lyric_json, JSON.stringify(main) , function (err) {
-                        if (err) throw err;
-                        console.log('File is created successfully.');
-                    });
+                    // var link_lyric_json = "home/dustin/nodejs/vimusic/public/musics/" + id.toString() + "/test_lyrics.json";
+                    // fs.writeFile(link_lyric_json, JSON.stringify(main) , function (err) {
+                    //     if (err) throw err;
+                    //     console.log('File is created successfully.');
+                    // });
                     /*
                     * end create .json file
                     */
-
             };
             var process = spawn('python',["./python/gpu.py"]);
             process.stdout.on('data', function(data) {
@@ -732,10 +749,6 @@ module.exports = app => {
             // id = "5e7d9bbc2fb3ca5c43912083";
             User.findOne({_id: id}, function (err, doc) {
                 if (doc) {
-                let pathMusicFolder = './public/musics/';
-                // Create folder music
-                var dir = pathMusicFolder + id.toString();
-                
                 let link_remove ="rm -v " + pathMusicFolder + id.toString() + '/temp_midi/*';
                 exec(link_remove, (error, stdout, stderr) => {
                     if (error) {
@@ -751,10 +764,7 @@ module.exports = app => {
                     } else {
                     }
                 });
-                if (!fs.existsSync(dir)){
-                    fs.mkdirSync(dir);
-                }
-                var dir = pathMusicFolder + id.toString() + '/temp_midi';
+                
 
                 if (!fs.existsSync(dir)){
                     fs.mkdirSync(dir);
@@ -1088,7 +1098,7 @@ module.exports = app => {
 		} else {
             console.log("id not found")
         }
-        id = "5e68828e1a301f125fb94c50"
+        // id = "5e68828e1a301f125fb94c50"
             // id = "5e68828e1a301f125fb94c50";
             // const id = req.params.id;
             User.findOne({_id: id}, function (err, doc) {

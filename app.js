@@ -81,13 +81,16 @@ global.__root   = __dirname + '/';
 app.get('/api', function (req, res) {
   res.status(200).send('API works.');
 });
-
+require('./app/routes/defaultRouter')(app);
 require('./app/routes.js')(app, passport);
 require('./app/routes/userLocal')(app);
 require('./app/routes/paymentRouter')(app);
 require('./app/routes/imageRouter')(app);
 require('./app/routes/musicRouter')(app);
 require('./app/routes/verifyEmail')(app);
+require('./app/routes/mockRouter')(app);
+require('./app/routes/paypalRouter')(app);
+require('./app/routes/albumMusicRouter')(app);
 var UserController = require(__root + 'app/routes/UserRouter');
 app.use('/api/users', UserController);
 

@@ -19,7 +19,8 @@ module.exports = function(app) {
                 console.log(docs);
                 res.json({
                     status: true,
-                    result:docs
+                    result:docs,
+                    url: "1583995677982.jpg"
                 });
 
             } else {
@@ -183,13 +184,8 @@ module.exports = function(app) {
         });
     });
     app.delete('/api/address', function(req, res) {
-        // const id = req.params.id;
         var id = req.cookies['idUser'];
 		if (id) {
-			// return res.send({
-			// 	token: token,
-			// 	idUser: idUser
-            // });
             console.log("id: ", id);
 		} else {
             console.log("id not found")
@@ -197,8 +193,6 @@ module.exports = function(app) {
          id = "5e68828e1a301f125fb94c50"
         const {index} = req.query;
         console.log('index: ', index);
-        // console.log('index: ', indexadd);
-        // console.log("index: ", typeof(index));
         User.findOne({_id: id}, function (err, doc) {
             if (doc) {
                 arr = doc.listAddress;

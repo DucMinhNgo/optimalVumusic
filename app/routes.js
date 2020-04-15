@@ -76,8 +76,8 @@ module.exports = function(app, passport){
 					*/
 					res.cookie('token', token, { maxAge: 1000*60*60*24*7, httpOnly: true });
 					res.cookie('idUser', req.user._id, {maxAge: 1000*60*60*24*7, httpOnly: true});
-					// return res.redirect('http://localhost:4200/home/homepage?id=' + req.user._id + "&token=" + token);
-					res.redirect('https://viws.ddns.net/home/homepage?id=' + req.user._id + "&token=" + token);
+					return res.redirect('http://localhost:4200/home/homepage?id=' + req.user._id + "&token=" + token);
+					// res.redirect('https://viws.ddns.net/home/homepage?id=' + req.user._id + "&token=" + token);
 	  			}
 	);
 	app.get('/getcookie', function(req, res) {
