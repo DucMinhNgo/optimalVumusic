@@ -612,14 +612,6 @@ module.exports = app => {
        */
     });
     app.post('/api/terminal', function(req, res) {
-        // console.log(req.body.music);
-        // console.log(req.body.params.options);
-        //
-        // var len_params_option = req.body.params.options.length;
-        // for ( let i = 0; i <len_params_option; i++) {
-        //     console.log(req.body.params.options[i]);
-        // }
-        //
         const {key, title} = req.body.music;
         const genre = req.body.params.title;
         var cuda_visible_devices = 2;
@@ -814,7 +806,6 @@ module.exports = app => {
                                     })
 
                                 } else {
-                                    
                                     // console.log(stdout);
                                     if (stdout) {
                                         // console.log("not empty");
