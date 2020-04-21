@@ -3,7 +3,7 @@
 var app = require('./app');
 var port = process.env.PORT || 8092;
 
-var server = app.listen(port, host="0.0.0.0", function() {
+var server = app.listen(port, host = "0.0.0.0", function () {
   console.log('Express server listening on port ' + port);
 });
 

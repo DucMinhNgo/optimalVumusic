@@ -24,15 +24,17 @@ require('./config/passport')(passport);
 /*
 * config size of image
 */
-app.use(bodyParser.json({limit: '50mb', extended: true}))
-app.use(bodyParser.urlencoded({limit: '50mb', extended: true}))
+app.use(bodyParser.json({ limit: '50mb', extended: true }))
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
 
 app.use(morgan('dev'));
 app.use(cookieParser());
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(session({secret: 'anystringoftext',
-				 saveUninitialized: true,
-         resave: true}));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(session({
+  secret: 'anystringoftext',
+  saveUninitialized: true,
+  resave: true
+}));
 
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
@@ -69,16 +71,16 @@ app.get('/testexample', (req, res) => {
 });
 
 // public image
-app.use('/images', express.static(__dirname +'/public/uploads'));
+app.use('/images', express.static(__dirname + '/public/uploads'));
 // end public image
 // public music
-app.use('/musics', express.static(__dirname +'/public/musics'));
-app.get('/getmusics', function (req, res){
-  express.static(__dirname +'/public/musics')
+app.use('/musics', express.static(__dirname + '/public/musics'));
+app.get('/getmusics', function (req, res) {
+  express.static(__dirname + '/public/musics')
 })
 // end public music
 
-global.__root   = __dirname + '/'; 
+global.__root = __dirname + '/';
 
 app.get('/api', function (req, res) {
   res.status(200).send('API works.');
@@ -104,39 +106,39 @@ app.use(addRequestId);
 var schedule = require('node-schedule');
 var today = new Date();
 // CHECK EXPIRED EVERYDAY
-var j = schedule.scheduleJob({hour:24}, function(){
-    // console.log('Check expired!');
-    var User = require('./app/models/user');
-    User.find({}, function (err, users) {
-      // console.log(users);
-      for (index in users) {
-        // console.log(users[index]);
-        expirationDate = users[index].get('expiration') ;
-        var oneDay=1000*60*60*24;
-        // console.log((expirationDate- today) / oneDay);
-        var checkTime = (expirationDate- today) / oneDay;
-        // console.log(checkTime);
-        if (checkTime > 0) {
-          console.log('account active');
-          
-        } else {
-          console.log('expired');
-          id = users[index].get('_id');
-          User.findOne({_id: id}, function (error, doc) {
-            if (doc) {
-              doc.status = 0;
-              doc.save();
-              console.log('status: ', doc.status);
-            } else {
-              console.log('error', error);
-            }
-          });
-          // users.save();
-        }
+var j = schedule.scheduleJob({ hour: 24 }, function () {
+  // console.log('Check expired!');
+  var User = require('./app/models/user');
+  User.find({}, function (err, users) {
+    // console.log(users);
+    for (index in users) {
+      // console.log(users[index]);
+      expirationDate = users[index].get('expiration');
+      var oneDay = 1000 * 60 * 60 * 24;
+      // console.log((expirationDate- today) / oneDay);
+      var checkTime = (expirationDate - today) / oneDay;
+      // console.log(checkTime);
+      if (checkTime > 0) {
+        console.log('account active');
+
+      } else {
+        console.log('expired');
+        id = users[index].get('_id');
+        User.findOne({ _id: id }, function (error, doc) {
+          if (doc) {
+            doc.status = 0;
+            doc.save();
+            console.log('status: ', doc.status);
+          } else {
+            console.log('error', error);
+          }
+        });
+        // users.save();
       }
-      // users.save();
-    });
+    }
+    // users.save();
   });
+});
 
 // console.log(process.env.key);
 module.exports = app;

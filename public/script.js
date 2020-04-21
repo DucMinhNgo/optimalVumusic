@@ -1,22 +1,22 @@
 var stripe;
 var checkoutSessionId;
 
-var setupElements = function() {
+var setupElements = function () {
   fetch("https://viws.ddns.net/predictor/admin/public-key", {
     method: "GET",
     headers: {
       "Content-Type": "application/json"
     }
   })
-    .then(function(result) {
+    .then(function (result) {
       return result.json();
     })
-    .then(function(data) {
+    .then(function (data) {
       stripe = Stripe(data.publicKey);
     });
 };
 
-var createCheckoutSession = function(isBuyingSticker) {
+var createCheckoutSession = function (isBuyingSticker) {
   fetch("https://viws.ddns.net/predictor/admin/create-checkout-session", {
     method: "POST",
     headers: {
@@ -24,10 +24,10 @@ var createCheckoutSession = function(isBuyingSticker) {
     },
     body: JSON.stringify({ isBuyingSticker })
   })
-    .then(function(result) {
+    .then(function (result) {
       return result.json();
     })
-    .then(function(data) {
+    .then(function (data) {
       checkoutSessionId = data.checkoutSessionId;
     });
 };
@@ -36,7 +36,7 @@ createCheckoutSession(false);
 
 document
   .querySelector('input[name="subscribe"]')
-  .addEventListener("change", function(evt) {
+  .addEventListener("change", function (evt) {
     if (this.checked) {
       createCheckoutSession(true);
       document.querySelector(".order-total").textContent = "$17.00"; // Because they are buying the extra item
@@ -46,20 +46,20 @@ document
     }
   });
 
-document.querySelector("#submit").addEventListener("click", function(evt) {
+document.querySelector("#submit").addEventListener("click", function (evt) {
   evt.preventDefault();
   // Initiate payment
   stripe
     .redirectToCheckout({
       sessionId: checkoutSessionId
     })
-    .then(function(result) {
+    .then(function (result) {
       console.log("error");
       // If `redirectToCheckout` fails due to a browser or network
       // error, display the localized error message to your customer
       // using `result.error.message`.
     })
-    .catch(function(err) {
+    .catch(function (err) {
       console.log(err);
     });
 });

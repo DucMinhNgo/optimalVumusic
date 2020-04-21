@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,12 +8,14 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
   <title>Node File Uploads</title>
 </head>
+
 <body>
   <div class="container">
     <h1>File Upload</h1>
     <%= typeof msg != 'undefined' ? msg : '' %>
 
-    <form id = "upload-form" action="https://viws.ddns.net/predictor/admin/api/profile" method="POST" enctype="multipart/form-data">
+    <form id="upload-form" action="https://viws.ddns.net/predictor/admin/api/profile" method="POST"
+      enctype="multipart/form-data">
       <!-- First Name: <input name="statusText" id="statusText" type="text" /> <br /> -->
       Avatar: <input name="avatar" id="avatar" type="text" /> <br />
       <div class="file-field input-field">
@@ -37,11 +40,11 @@
     function getdata() {
       var formData = new FormData();
       file = document.getElementById('file-picker').files;
-      for( element in file ) {   
-            formData.append('myImage', file[element]);
-        }
-        formData.append('statusText', 'Dustin');
-      
+      for (element in file) {
+        formData.append('myImage', file[element]);
+      }
+      formData.append('statusText', 'Dustin');
+
       $.ajax({
         type: "POST",
         url: "https://viws.ddns.net/predictor/admin/api/profile",
@@ -58,10 +61,9 @@
     }
   </script>
 
-  <script
-  src="https://code.jquery.com/jquery-3.2.1.min.js"
-  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-  crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
 </body>
+
 </html>

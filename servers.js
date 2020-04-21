@@ -36,7 +36,7 @@ var port = process.env.PORT || 8092;
 // }
 
 
-http.createServer(app).listen(port= 8092,host="0.0.0.0", () => {
+http.createServer(app).listen(port = 8092, host = "0.0.0.0", () => {
   console.log('Listening...')
 });
 
@@ -73,7 +73,7 @@ console.log('Server running at https://viws.ddns.net:', port);
 //   req.on('error', error => {
 //     console.error(error)
 //   });
-  
+
 //   req.write(data);
 //   req.end();
 // });

@@ -10,7 +10,7 @@ paypal.configure({
     'mode': 'sandbox', //sandbox or live
     'client_id': 'AbNN3We11ZUJxwYW97-rxNHZuXMdJ73sZoj8xt_6yjdcPlKSBDUcmAJiYLjMnJjMPeKzt-Xn9Gcy-VJQ',
     'client_secret': 'EIzXkimVptB2PD6kP6ZJ47_kPQdAHNKQ5EJr6ygN0kdu1rLNoR6K2XQNSj8nJ6y-LOr10Y8sgSBihwIR'
-  });
+});
 
 /*
 * END CONFIGURE
@@ -18,11 +18,11 @@ paypal.configure({
 
 module.exports = app => {
     app.post('/pay', function (req, res) {
-        var d = new Date(Date.now() + 1*60*1000);
+        var d = new Date(Date.now() + 1 * 60 * 1000);
         d.setSeconds(d.getSeconds() + 4);
         var isDate = d.toISOString();
         var isoDate = isDate.slice(0, 19) + 'Z';
-    
+
         var billingPlanAttributes = {
             "description": "Payment using triple",
             "merchant_preferences": {
@@ -45,58 +45,58 @@ module.exports = app => {
                     "type": "TRIAL",
                     "frequency": "DAY",
                     "amount": {
-                    "value": "5.99",
-                    "currency": "USD"
+                        "value": "5.99",
+                        "currency": "USD"
                     },
                     "cycles": "1",
                     "charge_models": [
                         {
-                          "type": "TAX",
-                          "amount": {
-                            "value": "0.29",
-                            "currency": "USD"
-                          }
+                            "type": "TAX",
+                            "amount": {
+                                "value": "0.29",
+                                "currency": "USD"
+                            }
                         },
                         {
-                          "type": "SHIPPING",
-                          "amount": {
-                            "value": "0.20",
-                            "currency": "USD"
-                          }
+                            "type": "SHIPPING",
+                            "amount": {
+                                "value": "0.20",
+                                "currency": "USD"
+                            }
                         }
-                      ],
-                      "frequency_interval": "1"
-                    },
+                    ],
+                    "frequency_interval": "1"
+                },
                 {
                     "name": "Regular payment definition",
                     "type": "REGULAR",
                     "frequency": "DAY",
                     "amount": {
-                    "value": "5.99",
-                    "currency": "USD"
+                        "value": "5.99",
+                        "currency": "USD"
                     },
                     "cycles": "10",
                     "charge_models": [
                         {
-                          "type": "TAX",
-                          "amount": {
-                            "value": "0.29",
-                            "currency": "USD"
-                          }
+                            "type": "TAX",
+                            "amount": {
+                                "value": "0.29",
+                                "currency": "USD"
+                            }
                         },
                         {
-                          "type": "SHIPPING",
-                          "amount": {
-                            "value": "0.20",
-                            "currency": "USD"
-                          }
+                            "type": "SHIPPING",
+                            "amount": {
+                                "value": "0.20",
+                                "currency": "USD"
+                            }
                         }
-                      ],
-                      "frequency_interval": "1"
-                    }
+                    ],
+                    "frequency_interval": "1"
+                }
             ]
         };
-    
+
         var billingPlanUpdateAttributes = [
             {
                 "op": "replace",
@@ -106,7 +106,7 @@ module.exports = app => {
                 }
             }
         ];
-    
+
         var billingAgreementAttributes = {
             "name": "Fast Speed Agreement",
             "description": "Agreement for Fast Speed Plan",
@@ -126,8 +126,8 @@ module.exports = app => {
                 "country_code": "US"
             }
         };
-    
-    // Create the billing plan
+
+        // Create the billing plan
         paypal.billingPlan.create(billingPlanAttributes, function (error, billingPlan) {
             if (error) {
                 console.log(error);
@@ -136,7 +136,7 @@ module.exports = app => {
                 console.log("Create Billing Plan Response");
                 console.log(billingPlan);
                 // paypal.billingPlan.update(billingPlan.id, )
-                
+
                 paypal.billingPlan.update(billingPlan.id, billingPlanUpdateAttributes, function (error, response) {
                     if (error) {
                         console.log(error);
@@ -156,7 +156,7 @@ module.exports = app => {
                                         console.log("For approving subscription via Paypal, first redirect user to");
                                         console.log(approval_url);
                                         res.redirect(approval_url);
-    
+
                                         console.log("Payment token is");
                                         console.log(url.parse(approval_url, true).query.token);
                                     }
@@ -170,21 +170,21 @@ module.exports = app => {
     });
     app.get('/paypal/success', function (req, res) {
         var token = req.query.token;
-        console.log(token,'tokentoken');
+        console.log(token, 'tokentoken');
         paypal.billingAgreement.execute(token, {}, function (error, billingAgreement) {
             if (error) {
                 console.error(error);
                 throw error;
             } else {
                 console.log(JSON.stringify(billingAgreement));
-                res.send({message:'Billing Agreement Created Successfully',data:JSON.stringify(billingAgreement)});
+                res.send({ message: 'Billing Agreement Created Successfully', data: JSON.stringify(billingAgreement) });
             }
         });
     });
 
-    app.get('/indexpaypal', function(req, res){
+    app.get('/indexpaypal', function (req, res) {
         res.render('paypalui');
-    }); 
+    });
 
     // ############################### old code #################################################
 

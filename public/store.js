@@ -15,10 +15,10 @@ var stripeHandler = StripeCheckout.configure({
     // token: function (token) {
     //     console.log(token);
     // }
-    token: function(token) {
+    token: function (token) {
         console.log('token: ', token);
         fetch('https://viws.ddns.net/predictor/admin/purchase', {
-        // fetch('/purchase', {
+            // fetch('/purchase', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -29,16 +29,16 @@ var stripeHandler = StripeCheckout.configure({
                 price: price,
                 userId: '5e609a8a908d5945dec73265'
             })
-        }).then(function(res) {
+        }).then(function (res) {
             return res.json()
-        }).then(function(data) {
+        }).then(function (data) {
             if (data.status == true) {
                 // location.replace(data.receipt_url);
                 alert('successfully');
             } else {
                 alert(data.msg);
             }
-        }).catch(function(error) {
+        }).catch(function (error) {
             console.error(error);
             alert('error');
         })
@@ -48,6 +48,6 @@ var stripeHandler = StripeCheckout.configure({
 function purchaseClicked() {
     console.log(price);
     stripeHandler.open({
-        amount: price*100
+        amount: price * 100
     });
 }

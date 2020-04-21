@@ -1,49 +1,49 @@
 if (document.readyState == 'loading') {
-    document.addEventListener('DOMContentLoaded', ready)
+  document.addEventListener('DOMContentLoaded', ready)
 } else {
-    ready()
+  ready()
 }
 
 function ready() {
-    document.getElementsByClassName('btn-purchase')[0].addEventListener('click', purchaseClicked)
+  document.getElementsByClassName('btn-purchase')[0].addEventListener('click', purchaseClicked)
 }
-function purchaseClicked () {
-    stripe.createToken(card).then(function(result) {
-        if (result.error) {
-          // Inform the user if there was an error.
-          var errorElement = document.getElementById('card-errors');
-          errorElement.textContent = result.error.message;
-        } else {
-          // Send the token to your server.
-          stripeTokenHandler(result.token);
-          console.log('result.Token: ', result.token);
-        //   console.log("stripeTokenHandler: ", stripeTokenHandler(result.token));
-          fetch('https://viws.ddns.net/predictor/admin/purchase', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-                stripeTokenId: result.token.id,
-                price: 20,
-                userId: '5e609a8a908d5945dec73265'
-            })
-        }).then(function(res) {
-            return res.json()
-        }).then(function(data) {
-            if (data.status == true) {
-                // location.replace(data.receipt_url);
-                alert('success');
-            } else {
-                alert(data.msg);
-            }
-        }).catch(function(error) {
-            console.error(error);
-            alert('error');
+function purchaseClicked() {
+  stripe.createToken(card).then(function (result) {
+    if (result.error) {
+      // Inform the user if there was an error.
+      var errorElement = document.getElementById('card-errors');
+      errorElement.textContent = result.error.message;
+    } else {
+      // Send the token to your server.
+      stripeTokenHandler(result.token);
+      console.log('result.Token: ', result.token);
+      //   console.log("stripeTokenHandler: ", stripeTokenHandler(result.token));
+      fetch('https://viws.ddns.net/predictor/admin/purchase', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          stripeTokenId: result.token.id,
+          price: 20,
+          userId: '5e609a8a908d5945dec73265'
         })
+      }).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        if (data.status == true) {
+          // location.replace(data.receipt_url);
+          alert('success');
+        } else {
+          alert(data.msg);
         }
-      });
+      }).catch(function (error) {
+        console.error(error);
+        alert('error');
+      })
+    }
+  });
 }
 /*
 * ADD TO TEST
@@ -75,13 +75,13 @@ var style = {
 };
 
 // Create an instance of the card Element.
-var card = elements.create('card', {style: style});
+var card = elements.create('card', { style: style });
 
 // Add an instance of the card Element into the `card-element` <div>.
 card.mount('#card-element');
 
 // Handle real-time validation errors from the card Element.
-card.addEventListener('change', function(event) {
+card.addEventListener('change', function (event) {
   var displayError = document.getElementById('card-errors');
   if (event.error) {
     displayError.textContent = event.error.message;
@@ -92,10 +92,10 @@ card.addEventListener('change', function(event) {
 
 // Handle form submission.
 var form = document.getElementById('payment-form');
-form.addEventListener('submit', function(event) {
+form.addEventListener('submit', function (event) {
   event.preventDefault();
 
-  stripe.createToken(card).then(function(result) {
+  stripe.createToken(card).then(function (result) {
     if (result.error) {
       // Inform the user if there was an error.
       var errorElement = document.getElementById('card-errors');
@@ -104,30 +104,30 @@ form.addEventListener('submit', function(event) {
       // Send the token to your server.
       stripeTokenHandler(result.token);
       console.log('result.Token: ', result.token);
-    //   console.log("stripeTokenHandler: ", stripeTokenHandler(result.token));
+      //   console.log("stripeTokenHandler: ", stripeTokenHandler(result.token));
       fetch('https://viws.ddns.net/predictor/admin/purchase', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
         body: JSON.stringify({
-            stripeTokenId: result.token.id,
-            price: 20
-            // userId: '5e609a8a908d5945dec73265'
+          stripeTokenId: result.token.id,
+          price: 20
+          // userId: '5e609a8a908d5945dec73265'
         })
-    }).then(function(res) {
+      }).then(function (res) {
         return res.json()
-    }).then(function(data) {
+      }).then(function (data) {
         if (data.status == true) {
-            location.replace(data.receipt_url);
+          location.replace(data.receipt_url);
         } else {
-            alert(data.msg);
+          alert(data.msg);
         }
-    }).catch(function(error) {
+      }).catch(function (error) {
         console.error(error);
         alert('error');
-    })
+      })
     }
   });
 });
@@ -145,5 +145,5 @@ function stripeTokenHandler(token) {
   form.appendChild(hiddenInput);
 
   // Submit the form
-//   form.submit();
+  //   form.submit();
 }
