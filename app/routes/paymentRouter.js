@@ -89,7 +89,7 @@ module.exports = function (app) {
   //         process.env.STRIPE_WEBHOOK_SECRET
   //       );
   //     } catch (err) {
-  //       console.log(`⚠️  Webhook signature verification failed.`);
+  //       console.log(`  Webhook signature verification failed.`);
   //       return res.sendStatus(400);
   //     }
   //     // Extract the object from the event.
@@ -106,10 +106,10 @@ module.exports = function (app) {
   //       items[0].custom.name === "Pasha e-book"
   //     ) {
   //       console.log(
-  //         `🔔  Customer is subscribed and bought an e-book! Send the e-book to ${customer.email}.`
+  //         `  Customer is subscribed and bought an e-book! Send the e-book to ${customer.email}.`
   //       );
   //     } else {
-  //       console.log(`🔔  Customer is subscribed but did not buy an e-book.`);
+  //       console.log(`  Customer is subscribed but did not buy an e-book.`);
   //     }
 
   //   }

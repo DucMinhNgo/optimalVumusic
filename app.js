@@ -24,8 +24,8 @@ require('./config/passport')(passport);
 /*
 * config size of image
 */
-app.use(bodyParser.json({ limit: '50mb', extended: true }))
-app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
+// app.use(bodyParser.json({ limit: '50mb', extended: true }))
+// app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
 
 app.use(morgan('dev'));
 app.use(cookieParser());
