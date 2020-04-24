@@ -1,30 +1,34 @@
 {
-  "name": "myapp",
+  "name": "vimusic",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Build beautiful, smart checkout flows Stripe Elements are rich, prebuilt UI components that help you create your own pixel-perfect checkout flows across desktop and mobile. db.users.remove({\"_id\": ObjectId(\"5e71a03243c7cf5629be4ba0\")}) db.users.remove({\"_id\": ObjectId(\"5e742c6f1b695a07636233b0\")}) db.users.remove({\"_id\": ObjectId(\"5e742c9a1b695a07636233b1\")}) db.users.remove({\"_id\": ObjectId(\"5e742ceb1b695a07636233b2\")}) db.users.remove({\"_id\": ObjectId(\"5e7426cb1b695a07636233af\")}) >> node JS su dung single thead multithead va da nhan cluster module: mot so network programs: HTTP, TCP, UDP, DNS, SSL Websockets. HTTP + JSON, Files, caching Proxy, Google API, RedisDB, MongoDB, CouchDB Nodejs sử dụng Javascript engine v8 của Google Single-threaded, Non-blocking I/O, Event loop nguyên tắc CAP nodejs: trang chu co the phuc vu trung binh 900 request/giây nginx: trang web đó có thể phục vụ hơn 1600 request/giây ------------------------------------------------------------------ http://auto-solution.online/cong-nghe-lap-trinh/angular-programming/deploy-express-js-website-len-vps-server-voi-nginx-pm2-va-ubuntu.html <!-- config nodejs --> mkdir simpleServer cd simpleServer npm init -y npm install express",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
-  "author": "dustin",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DucMinhNgo/viMusicnode.git"
+  },
+  "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DucMinhNgo/viMusicnode/issues"
+  },
+  "homepage": "https://github.com/DucMinhNgo/viMusicnode#readme",
   "dependencies": {
+    "bcrypt": "^4.0.1",
     "bcryptjs": "^2.4.3",
-    "circular-json": "^0.5.9",
     "connect-flash": "^0.1.1",
-    "cookie-parser": "^1.4.4",
-    "cors": "^2.8.5",
+    "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
-    "ejs": "^3.0.1",
     "express": "^4.17.1",
     "express-request-id": "^1.4.1",
-    "express-session": "^1.17.0",
-    "jquery": "^3.5.0",
+    "express-session": "^1.17.1",
     "jsonwebtoken": "^8.5.1",
-    "memory-cache": "^0.2.0",
-    "mongoose": "^5.9.1",
-    "morgan": "^1.9.1",
-    "mp3-duration": "^1.1.0",
+    "mongoose": "^5.9.10",
+    "morgan": "^1.10.0",
     "multer": "^1.4.2",
     "node-cache": "^5.1.0",
     "node-schedule": "^1.3.2",
@@ -34,10 +38,8 @@
     "passport-google-oauth": "^2.0.0",
     "passport-local": "^1.0.0",
     "paypal-rest-sdk": "^1.8.1",
-    "redis": "^3.0.2",
-    "request-ip": "^2.1.3",
-    "stripe": "^8.44.0",
-    "system-commands": "^1.1.7",
-    "tough-cookie": "^4.0.0"
+    "request": "^2.88.2",
+    "stripe": "^8.46.0",
+    "system-commands": "^1.1.7"
   }
 }
